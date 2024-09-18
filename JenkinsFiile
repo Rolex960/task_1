@@ -23,7 +23,7 @@ pipeline {
            steps {
                 sshagent(['docker']) {
                    sh """
-                         sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.110.196.240 uname -a
+                         sh 'ssh -o StrictHostKeyChecking=no ubuntu@3.110.196.240 uname -a'
                       """
               }
            }
@@ -31,8 +31,8 @@ pipeline {
        stage ('Docker_image') {
          steps {
              sh """" 
-                  sh " docker build -t jar_image "
-                  sh " docker run --name jar-con -d -p 9900:8080 jar_image"
+                  sh "docker build -t jar_image"
+                  sh "docker run --name jar-con -d -p 9900:8080 jar_image"
                  """
          }
        }
