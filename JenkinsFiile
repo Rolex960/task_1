@@ -4,37 +4,44 @@ pipeline {
         PATH = "/opt/maven3/bin:$PATH"
     }
     stages {
-        stage('cleanup') {
+        stage('Cleanup') {
             steps {
-                cleanWs()
+                cleanWs() // Cleans up the workspace
             }
         }
-        stage('checkout') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url:'https://github.com/Rolex960/task_1'
+                git branch: 'main', url: 'https://github.com/Rolex960/task_1' // Checkout from GitHub repository
             }
         }
         stage('Maven Build') {
             steps {
-                 sh "mvn clean package"
+                sh "mvn clean package" // Runs Maven build
             }
         }
-        stage('Remote SSH') {
+        stage('Remote SSH with PEM') {
             steps {
-                sshagent(['docker']) {
+                script {
+                    // Use the 'sshagent' to provide the private key for SSH connection
+                    sshagent(['docker']) { // Ensure 'docker' is your Jenkins credential ID for the SSH key
+                        // SSH into the remote machine using the stored PEM key
+                        sh '''
+                            ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@10.0.27.124 uname -a
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Docker Image') {
+            steps {
+                script {
+                    // Correct usage of shell commands without extra 'sh' calls
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@10.0.27.124 uname -a
+                        docker build -t jar_image .
+                        docker run --name jar-con -d -p 9900:8080 jar_image
                     '''
-              }
-           }
-       }
-       stage ('Docker_image') {
-         steps {
-             sh '''
-                  sh 'docker build -t jar_image'
-                  sh 'docker run --name jar-con -d -p 9900:8080 jar_image'
-                 '''
-         }
-       }
+                }
+            }
+        }
     }
 }
