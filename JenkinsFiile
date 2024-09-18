@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sshagent(['docker']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@3.110.196.240 uname -a
+                        ssh -o StrictHostKeyChecking=no ubuntu@10.0.27.124 uname -a
                     '''
               }
            }
