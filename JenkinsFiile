@@ -19,6 +19,18 @@ pipeline {
                 sh "mvn clean package" // Runs Maven build
             }
         }
+        stage('Connect to Server') {
+            steps {
+                sshagent(['conn']) {
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@43.205.116.16 "echo Connected successfully!"'
+                }
+            }
+        }
+        stage('copy artifact') {
+            steps {
+                    sh 'scp -o StrictHostKeyChecking=no ubuntu@43.205.116.16 "echo Connected successfully!"'
+            }
+        }
         stage('Docker Image') {
             steps {
                 script {
