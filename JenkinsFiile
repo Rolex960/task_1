@@ -22,7 +22,7 @@ pipeline {
         stage('Connect to Server') {
             steps {
                 sshagent(['conn']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@43.205.116.16'
+                    sh 'ssh ubuntu@43.205.116.16'
                 }
             }
         }
