@@ -28,7 +28,7 @@ pipeline {
         }
         stage('copy artifact') {
             steps {
-                    sh 'scp -o StrictHostKeyChecking=no ubuntu@43.205.116.16 "echo Connected successfully!"'
+                    sh 'scp /var/lib/jenkins/workspace/connectiion/target/devops-integration.jar ubuntu@43.205.116.16:/home/ubuntu/Task'
             }
         }
         stage('Docker Image') {
