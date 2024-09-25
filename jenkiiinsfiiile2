@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage('cloning'){
             steps{
-                git branch :'main' ,url:'https://github.com/Rolex960/task_1.git'
+                git branch :'main', url:'https://github.com/Rolex960/task_1.git'
             }
         }
         stage('build'){
