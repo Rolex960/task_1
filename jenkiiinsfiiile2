@@ -1,0 +1,37 @@
+pipeline{
+    agent any
+    stages{
+        stage('cloning'){
+            steps{
+                git branch :'main' ,url:'https://github.com/Rolex960/task_1.git'
+            }
+        }
+        stage('build'){
+            steps{
+              sh'mvn clean package'
+            }
+        }
+        stage('connection'){
+            steps{
+                sh'ssh -i /var/lib/jenkins/.ssh/id_rsa -o UserKnownHostsFile=/var/lib/jenkins/.ssh/known_hosts  ubuntu@13.233.236.85'
+            }
+        }
+        stage('copy artifact'){
+            steps{
+                sh'scp -i /var/lib/jenkins/.ssh/id_rsa /var/lib/jenkins/workspace/projecttask1/target/*.war ubuntu@13.233.236.85:/home/ubuntu'
+                
+            }
+        }
+        stage('create image'){
+            steps{
+                sh'ssh -i /var/lib/jenkins/.ssh/id_rsa -o UserKnownHostsFile=/var/lib/jenkins/.ssh/known_hosts  ubuntu@13.233.236.85 docker build -t image .'
+            }
+        }
+        stage('create container'){
+            steps{
+                sh'ssh -i /var/lib/jenkins/.ssh/id_rsa -o UserKnownHostsFile=/var/lib/jenkins/.ssh/known_hosts  ubuntu@13.233.236.85 docker rm con1 -f'
+                sh'ssh -i /var/lib/jenkins/.ssh/id_rsa -o UserKnownHostsFile=/var/lib/jenkins/.ssh/known_hosts  ubuntu@3.110.105.27 docker run --name con1 -d -p 99:8080 image'
+            }
+        }
+    }
+}
