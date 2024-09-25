@@ -3,17 +3,17 @@ pipeline {
     stages {
         stage('Cleanup') {
             steps {
-                cleanWs() // Cleans up the workspace
+                cleanWs()
             }
         }
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Rolex960/task_1' // Checkout from GitHub repository
+                git branch: 'main', url: 'https://github.com/Rolex960/task_1'
             }
         }
         stage('Maven Build') {
             steps {
-                sh "mvn clean package" // Runs Maven build
+                sh "mvn clean package"
             }
         }
         stage('Connect to Server') {
@@ -33,7 +33,6 @@ pipeline {
         stage('Docker Image') {
             steps {
                 script {
-                    // Correct usage of shell commands without extra 'sh' calls
                     sh '''
                         docker build -t jar_image .
                         docker run --name jar-con -d -p 9900:8080 jar_image
